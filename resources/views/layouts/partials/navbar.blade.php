@@ -1,5 +1,6 @@
 {{-- NAV BAR (Menggunakan background white/light agar elegan) --}}
 <nav class="navbar navbar-expand-lg navbar-light-custom sticky-top shadow-sm"> 
+    {{-- Menggunakan container-lg agar konten tidak full-width --}}
     <div class="container-fluid container-lg">
         
         <a class="navbar-brand" href="{{ url('/') }}">
@@ -12,12 +13,11 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             
-            <ul class="navbar-nav ms-auto fw-medium">
-                
+            {{-- Bagian Kiri Navbar (Navigasi Utama) --}}
+            <ul class="navbar-nav me-auto fw-medium">
                 <li class="nav-item">
                     <a class="nav-link text-dark me-3" href="{{ url('/') }}">Home</a>
                 </li>
-                
                 <li class="nav-item">
                     <a class="nav-link text-dark me-3" href="{{ url('/price-list') }}">Price List</a>
                 </li>
@@ -39,6 +39,67 @@
                     <a class="nav-link fw-bold text-primary-rose" href="{{ url('/contact') }}">Contact</a>
                 </li>
             </ul>
+            
+            <div class="d-flex align-items-center">
+                 @auth 
+                
+                {{-- 1. Ikon Keranjang (Badge hanya muncul jika $cartCount > 0) --}}
+                @php
+                    // Pastikan count dihitung di View Composer atau Controller (default 0 jika null)
+                    $currentCartCount = $cartCount ?? 0; 
+                @endphp
+
+                <a href="{{ route('cart.index') }}" class="btn btn-link text-dark position-relative p-0 me-3">
+                    <i class="fas fa-shopping-cart fa-lg"></i>
+                    
+                    @if ($currentCartCount > 0)
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger" style="font-size: 0.6em;">
+                        {{ $currentCartCount }} 
+                        <span class="visually-hidden">items in cart</span>
+                    </span>
+                    @endif
+                </a>
+                {{-- 2. Dropdown Profile (Tombol Profile & Logout) --}}
+                <div class="dropdown">
+                    <button class="btn btn-primary-rose dropdown-toggle btn-sm fw-bold" 
+                            type="button" 
+                            id="userDropdown" 
+                            data-bs-toggle="dropdown" 
+                            aria-expanded="false">
+                        <i class="fas fa-user me-1"></i> {{ Auth::user()->name ?? 'Akun' }}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end border-primary-rose shadow-sm" aria-labelledby="userDropdown">
+                        
+                        {{-- Tautan Profile/Dashboard --}}
+                        <li><a class="dropdown-item text-dark" href="{{ url('/dashboard') }}">
+                            <i class="fas fa-user-circle me-2 text-primary-rose"></i> Profil Saya
+                        </a></li>
+                        
+                        {{-- Tautan Pesanan/Riwayat --}}
+                        <li><a class="dropdown-item text-dark" href="{{ route('orders.index') }}">
+                            <i class="fas fa-receipt me-2 text-primary-rose"></i> Pesanan Saya
+                        </a></li>
+                        
+                        <li><hr class="dropdown-divider"></li>
+                        
+                        {{-- Tombol Logout (Menggunakan Form POST) --}}
+                        <li>
+                            <form method="POST" action="{{ route('logout') }}" class="m-0">
+                                @csrf
+                                <button type="submit" class="dropdown-item text-danger">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                
+                @else
+                {{-- Jika belum login --}}
+                <a href="{{ route('login') }}" class="btn btn-primary-rose btn-sm fw-bold">Login</a>
+                @endauth
+            </div>
+            
         </div>
     </div>
 </nav>

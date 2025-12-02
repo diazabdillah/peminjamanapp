@@ -257,66 +257,97 @@
     {{-- ========================================================== --}}
     {{-- 3. SECTION SEWA SOUND SYSTEM (STANDARD) --}}
     {{-- ========================================================== --}}
-    <section class="container py-5">
-        @php $soundSystemTitle = $product1->firstWhere('category_id', 5)->nama_kategori ?? 'Sewa Sound System Standard'; @endphp
-        
-        <h2 class="text-center text-dark fw-bold mb-5">{{ $soundSystemTitle }}</h2>
+<section class="container py-5">
+    @php $soundSystemTitle = $product1->firstWhere('category_id', 5)->nama_kategori ?? 'Sewa Sound System Standard'; @endphp
+    
+    <h2 class="text-center text-dark fw-bold mb-5">{{ $soundSystemTitle }}</h2>
 
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 justify-content-center">
-            @foreach ($product1 as $package)
-            @if($package->category_id == 5)
-            <div class="col">
-                <div class="card bg-white h-100 border-3 border-primary-rose shadow-lg card-hover-scale">
-                    <img src="https://via.placeholder.com/400x200?text=Sound+{{ $package->image }}" class="card-img-top" alt="Sound System">
-                    <div class="card-body text-center p-4 d-flex flex-column">
-                        <h4 class="card-title text-primary-rose fw-bold">{{ $package->name }}</h4>
-                        <p class="card-text text-secondary mb-3 small">{{ $package->description }}</p>
-                        <h5 class="fw-bolder text-dark mt-auto mb-3">Harga: Rp {{ number_format($package->price, 0, ',', '.') }}</h5>
-                        <button class="btn btn-sm btn-primary-rose w-100">Pesan Sekarang</button>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 justify-content-center">
+        @foreach ($product1 as $package)
+        @if($package->category_id == 5)
+        <div class="col">
+            <div class="card bg-white h-100 border border-primary-rose shadow-lg card-hover-scale">
+                <img src="https://via.placeholder.com/400x200?text=Sound+{{ $package->image }}" class="card-img-top" alt="Sound System">
+                <div class="card-body text-center p-4 d-flex flex-column">
+                    <h4 class="card-title text-primary-rose fw-bold">{{ $package->name }}</h4>
+                    <p class="card-text text-secondary mb-3 small">{{ $package->description }}</p>
+                    <h5 class="fw-bolder text-dark mt-auto mb-3">Harga: Rp {{ number_format($package->price, 0, ',', '.') }}</h5>
+                    
+                    <div class="d-grid gap-2 d-sm-flex justify-content-center">
+                        
+                        {{-- PERBAIKAN KRITIS PADA FORM INPUT PRODUCT_ID --}}
+                        <form action="{{ route('cart.store') }}" method="POST" class="d-inline flex-fill">
+                            @csrf
+                            {{-- PASTIKAN VALUE ID DITARIK DARI ELOQUENT OBJECT --}}
+                            <input type="hidden" name="product_id" value="{{ $package->id }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn btn-sm btn-primary-rose w-100">
+                                <i class="fas fa-shopping-cart me-1"></i> Add to Chart
+                            </button>
+                        </form>
+                        
+                        <a href="{{ url('/checkout/direct/' . $package->id) }}" class="btn btn-sm btn-outline-secondary flex-fill d-flex align-items-center justify-content-center">
+                            <i class="fas fa-bolt me-1"></i> Pesan Langsung
+                        </a>
                     </div>
                 </div>
             </div>
-            @endif
-            @endforeach
         </div>
-    </section>
+        @endif
+        @endforeach
+    </div>
+</section>
     
-    ---
 
     {{-- 4. SECTION SOUND SYSTEM LINE ARRAY --}}
-    <section class="container py-5">
-        @php
-            $lineArrayTitle = $product1->firstWhere('category_id', 1)->nama_kategori ?? 'Sound System Line Array (Skala Besar)';
-        @endphp
-        
-        <h2 class="text-center text-dark fw-bold mb-5">{{ $lineArrayTitle }}</h2>
-        
-        <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
-            @foreach ($product1 as $package)
-            @if($package->category_id == 1)
-            <div class="col">
-                <div class="card bg-white h-100 border-3 border-primary-rose shadow-lg card-hover-scale">
-                    <img src="https://via.placeholder.com/400x200?text=Line+Array" class="card-img-top" alt="Line Array">
-                    <div class="card-body text-center p-4 d-flex flex-column">
-                        <h4 class="card-title text-primary-rose fw-bold">{{ $package->name }}</h4>
-                        <p class="card-text text-secondary mb-3 small">{{ $package->description }}</p>
-                        <h5 class="fw-bolder text-dark mt-auto mb-3">Harga Mulai: Rp {{ number_format($package->price, 0, ',', '.') }}</h5>
-                        <button class="btn btn-sm btn-primary-rose w-100">Konsultasi Harga</button>
+<section class="container py-5">
+    @php $lineArrayTitle = $product1->firstWhere('category_id', 1)->nama_kategori ?? 'Sound System Line Array'; @endphp
+    
+    <h2 class="text-center text-dark fw-bold mb-5">{{ $lineArrayTitle }}</h2>
+    
+    <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+        @foreach ($product1 as $package)
+        @if($package->category_id == 1)
+        <div class="col">
+            <div class="card bg-white h-100 border border-primary-rose shadow-lg card-hover-scale">
+                <img src="https://via.placeholder.com/400x200?text=Line+Array" class="card-img-top" alt="Line Array">
+                <div class="card-body text-center p-4 d-flex flex-column">
+                    <h4 class="card-title text-primary-rose fw-bold">{{ $package->name }}</h4>
+                    <p class="card-text text-secondary mb-3 small">{{ $package->description }}</p>
+                    <h5 class="fw-bolder text-dark mt-auto mb-3">Harga Mulai: Rp {{ number_format($package->price, 0, ',', '.') }}</h5>
+                    
+                    {{-- DUAL CTA BUTTONS FIX --}}
+                    <div class="d-grid gap-2 d-sm-flex justify-content-center">
+                        {{-- 1. FORM UNTUK ADD TO CART (CHART) --}}
+                        <form action="{{ route('cart.store') }}" method="POST" class="d-inline flex-fill">
+                            @csrf
+                            <input type="hidden" name="product_id" value="{{ $package->id }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn btn-sm btn-primary-rose w-100">
+                                <i class="fas fa-shopping-cart me-1"></i> Add to Chart
+                            </button>
+                        </form>
+                        {{-- 2. PESAN LANGSUNG (Link ke Checkout) --}}
+                        <a href="{{ url('/checkout/direct/' . $package->id) }}" class="btn btn-sm btn-outline-secondary flex-fill d-flex align-items-center justify-content-center">
+                            <i class="fas fa-bolt me-1"></i> Pesan Langsung
+                        </a>
                     </div>
                 </div>
             </div>
-            @endif
-            @endforeach
         </div>
-    </section>
+        @endif
+        @endforeach
+    </div>
+</section>
 
-    ---
 
-    {{-- 5. SECTION LIVE STREAMING & WORKFLOW --}}
+
+    {{-- 6. SECTION LIVE STREAMING --}}
+    
+    
+    
     <section class="container py-5">
-        @php
-            $liveStreamTitle = $product1->firstWhere('category_id', 3)->nama_kategori ?? 'Paket Layanan Live Streaming Profesional';
-        @endphp
+        @php $liveStreamTitle = $product1->firstWhere('category_id', 3)->nama_kategori ?? 'Live Streaming'; @endphp
         
         <h2 class="text-center text-dark fw-bold mb-5">{{ $liveStreamTitle }}</h2>
         
@@ -324,17 +355,24 @@
             @foreach ($product1 as $package)
             @if($package->category_id == 3)
             <div class="col">
-                <div class="card bg-white h-100 border-3 border-primary-rose shadow-lg text-center card-hover-scale">
+                <div class="card bg-white h-100 border border-primary-rose shadow-lg text-center card-hover-scale">
                     <div class="card-body p-4 d-flex flex-column">
-                        <h5 class="text-primary-rose fw-bold mb-4">{{ $package->name }}</h5>
-                        <h4 class="fw-bolder text-dark">Rp {{ number_format($package->price, 0, ',', '.') }},-</h4>
-                        <hr class="my-3 border-primary-rose">
-                        <ul class="list-unstyled small text-secondary text-start mx-auto flex-grow-1" style="max-width: 250px;">
-                            <li><i class="fas fa-check-circle me-2 text-primary-rose"></i> **Kualitas Terbaik:** {{ $package->description }}</li>
-                            <li><i class="fas fa-check-circle me-2 text-primary-rose"></i> Multi-Camera Support</li>
-                            <li><i class="fas fa-check-circle me-2 text-primary-rose"></i> Platform Fleksibel (YouTube/Zoom)</li>
+                        <h5 class="text-primary-rose fw-bold">{{ $package->name }}</h5>
+                        <h4 class="fw-bolder text-dark mt-4">Rp {{ number_format($package->price, 0, ',', '.') }},-</h4>
+                        <hr>
+                        <ul class="list-unstyled small text-secondary mx-auto flex-grow-1" style="max-width: 250px;">
+                             <li><i class="fas fa-check-circle me-1 text-primary-rose"></i> {{ $package->description }}</li>
                         </ul>
-                        <button class="btn btn-sm btn-primary-rose mt-3 w-100">Pesan Sekarang</button>
+                        
+                        {{-- DUAL CTA BUTTONS FIX --}}
+                        <div class="d-grid gap-2 d-sm-flex justify-content-center mt-auto">
+                            <button class="btn btn-sm btn-primary-rose flex-fill">
+                                <i class="fas fa-shopping-cart me-1"></i> Add to Chart
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary flex-fill">
+                                <i class="fas fa-bolt me-1"></i> Pesan Langsung
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -342,17 +380,15 @@
             @endforeach
         </div>
         
-        <h4 class="text-center text-dark fw-bold mt-5 mb-4">Cara Kerja Live Streaming Kami</h4>
-        
+        {{-- Cara Kerja Live Streaming --}}
+        {{-- <h4 class="text-center text-dark fw-bold mt-5 mb-4">Cara Kerja Live Streaming Kami</h4>
         <div class="text-center">
-            
-
-[Image of Live Streaming Event Production Workflow Diagram]
-
-            <img src="https://via.placeholder.com/900x300?text=Live+Streaming+Workflow+Diagram" class="img-fluid rounded-lg shadow-lg border border-3 border-dark" alt="Workflow Diagram">
-            <p class="small text-secondary mt-3">Output siaran dapat disiarkan ke berbagai platform seperti **YouTube**, **Zoom**, atau platform kustom.</p>
-        </div>
+            <img src="https://via.placeholder.com/900x300?text=Live+Streaming+Workflow+Diagram" class="img-fluid rounded-lg shadow-lg" alt="Workflow Diagram">
+            <p class="small text-secondary mt-3">Output siaran dapat disiarkan ke berbagai platform seperti YouTube, Zoom, atau platform kustom.</p>
+        </div> --}}
     </section>
+
+
     
 
 

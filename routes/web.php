@@ -1,8 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\AuthController;
 use App\Models\Product;
 /*
 |--------------------------------------------------------------------------
@@ -44,3 +48,29 @@ Route::get('/categories', [ProductController::class, 'categories'])->name('produ
 Route::get('/catalog', [ProductController::class, 'index'])->name('products.index'); 
 // Rute detail produk
 Route::get('/product/{product:slug}', [ProductController::class, 'show'])->name('products.show');
+
+
+//route fix
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/store/cart', [CartController::class, 'store'])->name('cart.store');
+Route::put('/cart/{itemId}', [CartController::class, 'update'])->name('cart.update');
+Route::delete('/cart/{itemId}', [CartController::class, 'destroy'])->name('cart.destroy');
+Route::get('/checkout/confirmation', [CheckoutController::class, 'show'])->name('checkout.show');
+Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+
+    // Order Management
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    
+    // Payment Initiation
+Route::get('/payment/{order}', [PaymentController::class, 'processPayment'])->name('payment.process');
+Route::post('/payment/notification', [PaymentController::class, 'handleNotification'])->name('midtrans.notification');
+
+Route::get('register', [AuthController::class, 'registerForm'])->name('register');
+Route::post('register', [AuthController::class, 'register']);
+
+    // Login
+Route::get('login', [AuthController::class, 'loginForm'])->name('login');
+Route::post('login', [AuthController::class, 'login']);
+Route::post('logout', [AuthController::class, 'logout'])
+    ->name('logout');
