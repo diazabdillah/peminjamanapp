@@ -20,24 +20,21 @@ use App\Models\Product;
 */
 
 Route::get('/', function () {
-    $product1 = Product::join('categories', 'products.category_id', '=', 'categories.id')
-    ->select(
-        // Perbaikan: Gunakan 'products.name' (tabel jamak)
-        'products.name', 
-        'products.description',
-        'products.price',
-        'products.image',
-        'products.category_id',
-        // Kolom dari tabel categories
-        'categories.nama_kategori'
-    )
-    ->where('stock','>', 0)
-    ->get();
-    return view('landingpage', compact('product1'));
+   // Ambil data paket (type = 'package')
+        $products = Product::where('type', 'package')
+                           ->orderBy('price', 'asc')
+                           ->get();
+
+        // Ambil data item terpisah (type = 'addon')
+        $addons = Product::where('type', 'addon')
+                         ->orderBy('price', 'asc')
+                         ->get();
+
+        return view('landingpage', compact('products', 'addons'));
 });
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
-
+Route::post('/cart/clear', [CartController::class, 'clear'])->name('cart.clear'); // <-- RUTE YANG HILANG
     // Register
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
@@ -52,7 +49,7 @@ Route::get('/product/{product:slug}', [ProductController::class, 'show'])->name(
 
 //route fix
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/store/cart', [CartController::class, 'store'])->name('cart.store');
+Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
 Route::put('/cart/{itemId}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/{itemId}', [CartController::class, 'destroy'])->name('cart.destroy');
 Route::get('/checkout/confirmation', [CheckoutController::class, 'show'])->name('checkout.show');

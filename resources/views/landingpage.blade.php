@@ -5,98 +5,7 @@
 
 @push('styles')
 <style>
-    /* Menambahkan beberapa class kustom untuk meningkatkan tampilan */
-    .bg-secondary-pink-custom {
-        background-color: #eb0853ff; /* Light Pink - Warna yang lembut */
-    }
-    .text-primary-rose {
-        color: #e91e63 !important; /* Rose - Warna yang kuat untuk branding */
-    }
-    .btn-primary-rose {
-        background-color: #e91e63;
-        border-color: #e91e63;
-        color: #fff;
-        transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-    .btn-primary-rose:hover {
-        background-color: #c2185b;
-        border-color: #c2185b;
-        transform: translateY(-2px); /* Efek hover ringan */
-    }
-    .card-hover-scale {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .card-hover-scale:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
-    }
-    .hero-image-container {
-        clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%);
-        /* Efek clipping untuk tampilan lebih unik di desktop */
-    }
-    @media (max-width: 991.98px) {
-        .hero-image-container {
-            clip-path: none;
-            /* Nonaktifkan clipping di perangkat mobile */
-        }
-    }
-    /* Filter Grayscale untuk mitra */
-    .grayscale-filter {
-        filter: grayscale(100%);
-        opacity: 0.7;
-    }
-    .transition-filter {
-        transition: filter 0.3s ease, opacity 0.3s ease;
-    }
-    .logo-item:hover .grayscale-filter {
-        filter: grayscale(0%);
-        opacity: 1;
-    }
-    /* Efek untuk Galeri */
-    .gallery-item {
-        overflow: hidden;
-        border-radius: 8px;
-        position: relative;
-    }
-    .gallery-item img {
-        transition: transform 0.5s ease;
-    }
-    .gallery-item:hover img {
-        transform: scale(1.05);
-    }
-    .gallery-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(233, 30, 99, 0.7); /* Primary Rose Semi-transparan */
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        text-align: center;
-        padding: 20px;
-    }
-    .gallery-item:hover .gallery-overlay {
-        opacity: 1;
-    }
-    /* Custom style untuk kontrol carousel yang lebih terlihat */
-    .carousel-control-prev-icon,
-    .carousel-control-next-icon {
-        background-color: rgba(233, 30, 99, 0.7); /* Warna Primary Rose */
-        padding: 20px;
-        border-radius: 50%;
-        opacity: 1; /* Pastikan selalu terlihat */
-    }
-    .carousel-control-prev, .carousel-control-next {
-        opacity: 0.8;
-    }
-    .carousel-control-prev:hover, .carousel-control-next:hover {
-        opacity: 1;
-    }
+/* ... (CSS Anda) ... */
 </style>
 @endpush
 
@@ -111,7 +20,7 @@
    <div class="container-fluid p-0">
     <div class="row align-items-stretch g-0"> {{-- Menggunakan align-items-stretch untuk memastikan kolom mengisi tinggi penuh --}}
         
-        <div class="col-lg-6 order-lg-2 order-1">
+        <div class="col-lg-6 order-lg-1 order-2"> {{-- Diubah ke order 1 agar hero text di kiri di desktop --}}
             {{-- h-100 memastikan card ini mengisi tinggi kolom secara penuh --}}
             <div class="card p-4 p-md-5 bg-white d-flex flex-column justify-content-center rounded-0 border-0">
                 <p class="small fw-bold text-primary-rose text-uppercase mb-2">Mutiara Entertainment</p>
@@ -128,7 +37,7 @@
             </div> 
         </div>
 
-        <div class="col-lg-6 order-lg-2 order-1 text-center">
+        <div class="col-lg-6 order-lg-2 order-1 text-center"> {{-- Diubah ke order 2 agar gambar di kanan di desktop --}}
             {{-- Menghilangkan hero-image-container dan menggunakan h-100 agar carousel mengisi kolom --}}
             <div id="heroCarousel" class="carousel bg-white slide h-100" data-bs-ride="carousel"> 
                 
@@ -150,7 +59,6 @@
                             style="object-fit: cover;"> {{-- min-height 400px dihilangkan --}}
                         <div class="carousel-caption d-none d-md-block bg-primary-rose bg-opacity-50 rounded p-2">
                             <h5 class="fw-bold">Dekorasi Pilihan Terbaik</h5>
-                            <p class="small">Sentuhan mewah untuk hari spesial Anda.</p>
                         </div>
                     </div>
                     
@@ -162,7 +70,6 @@
                             style="object-fit: cover;">
                         <div class="carousel-caption d-none d-md-block bg-primary-rose bg-opacity-50 rounded p-2">
                             <h5 class="fw-bold">Sound System Profesional</h5>
-                            <p class="small">Kualitas audio jernih untuk acara korporat.</p>
                         </div>
                     </div>
                     
@@ -174,7 +81,6 @@
                             style="object-fit: cover;">
                         <div class="carousel-caption d-none d-md-block bg-primary-rose bg-opacity-50 rounded p-2">
                             <h5 class="fw-bold">Layanan Live Streaming HD</h5>
-                            <p class="small">Jangkau audiens lebih luas tanpa batas.</p>
                         </div>
                     </div>
 
@@ -196,7 +102,7 @@
     {{-- ========================================================== --}}
     {{-- 2. SECTION TESTIMONI (CAROUSEL) --}}
     {{-- ========================================================== --}}
- <section class="container-fluid bg-white py-5">
+<section class="container-fluid bg-white py-5">
     <div class="container">
         <div class="text-center mb-5">
             <h2 class="display-6 fw-bold mb-2 text-primary-rose">Spesialis Corporate Event!</h2>
@@ -252,144 +158,104 @@
         </div>
     </div>
 </section>
- 
     
     {{-- ========================================================== --}}
-    {{-- 3. SECTION SEWA SOUND SYSTEM (STANDARD) --}}
+    {{-- 3. SECTION SEWA SOUND SYSTEM (PAKET PRODUK DARI DB) --}}
     {{-- ========================================================== --}}
-<section class="container py-5">
-    @php $soundSystemTitle = $product1->firstWhere('category_id', 5)->nama_kategori ?? 'Sewa Sound System Standard'; @endphp
-    
-    <h2 class="text-center text-dark fw-bold mb-5">{{ $soundSystemTitle }}</h2>
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 justify-content-center">
-        @foreach ($product1 as $package)
-        @if($package->category_id == 5)
-        <div class="col">
-            <div class="card bg-white h-100 border border-primary-rose shadow-lg card-hover-scale">
-                <img src="https://via.placeholder.com/400x200?text=Sound+{{ $package->image }}" class="card-img-top" alt="Sound System">
-                <div class="card-body text-center p-4 d-flex flex-column">
-                    <h4 class="card-title text-primary-rose fw-bold">{{ $package->name }}</h4>
-                    <p class="card-text text-secondary mb-3 small">{{ $package->description }}</p>
-                    <h5 class="fw-bolder text-dark mt-auto mb-3">Harga: Rp {{ number_format($package->price, 0, ',', '.') }}</h5>
-                    
-                    <div class="d-grid gap-2 d-sm-flex justify-content-center">
-                        
-                        {{-- PERBAIKAN KRITIS PADA FORM INPUT PRODUCT_ID --}}
-                        <form action="{{ route('cart.store') }}" method="POST" class="d-inline flex-fill">
-                            @csrf
-                            {{-- PASTIKAN VALUE ID DITARIK DARI ELOQUENT OBJECT --}}
-                            <input type="hidden" name="product_id" value="{{ $package->id }}">
-                            <input type="hidden" name="quantity" value="1">
-                            <button type="submit" class="btn btn-sm btn-primary-rose w-100">
-                                <i class="fas fa-shopping-cart me-1"></i> Add to Chart
-                            </button>
-                        </form>
-                        
-                        <a href="{{ url('/checkout/direct/' . $package->id) }}" class="btn btn-sm btn-outline-secondary flex-fill d-flex align-items-center justify-content-center">
-                            <i class="fas fa-bolt me-1"></i> Pesan Langsung
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endif
-        @endforeach
+<section id="price-list" class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="display-6 fw-bold mb-2 text-dark">Pilih Paket Sound System Terbaik Anda 🔊</h2>
+        <p class="lead text-primary-rose">Layanan Audio Visual, Lighting, dan Streaming berkualitas profesional.</p>
     </div>
-</section>
-    
 
-    {{-- 4. SECTION SOUND SYSTEM LINE ARRAY --}}
-<section class="container py-5">
-    @php $lineArrayTitle = $product1->firstWhere('category_id', 1)->nama_kategori ?? 'Sound System Line Array'; @endphp
-    
-    <h2 class="text-center text-dark fw-bold mb-5">{{ $lineArrayTitle }}</h2>
-    
-    <div class="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
-        @foreach ($product1 as $package)
-        @if($package->category_id == 1)
-        <div class="col">
-            <div class="card bg-white h-100 border border-primary-rose shadow-lg card-hover-scale">
-                <img src="https://via.placeholder.com/400x200?text=Line+Array" class="card-img-top" alt="Line Array">
-                <div class="card-body text-center p-4 d-flex flex-column">
-                    <h4 class="card-title text-primary-rose fw-bold">{{ $package->name }}</h4>
-                    <p class="card-text text-secondary mb-3 small">{{ $package->description }}</p>
-                    <h5 class="fw-bolder text-dark mt-auto mb-3">Harga Mulai: Rp {{ number_format($package->price, 0, ',', '.') }}</h5>
+    <div class="row justify-content-center g-4">
+        @foreach ($products as $product)
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-lg border-{{ $product->id == 2 ? 'primary-rose border-4' : 'light' }} card-hover-scale">
+                
+                {{-- Header Card --}}
+                <div class="card-header text-center bg-{{ $product->id == 2 ? 'primary-rose text-white' : 'light' }} p-3">
+                    <h4 class="fw-bold mb-1">{{ $product->name }}</h4>
+                    <p class="small m-0 {{ $product->id == 2 ? 'text-white-50' : 'text-secondary' }}">{{ $product->tag }}</p>
+                </div>
+
+                {{-- Body Card --}}
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div class="text-center mb-4">
+                        <p class="mb-0 small text-secondary">Mulai dari</p>
+                        <h2 class="display-5 fw-bolder text-primary-rose">Rp {{ number_format($product->price, 0, ',', '.') }}</h2>
+                    </div>
                     
-                    {{-- DUAL CTA BUTTONS FIX --}}
-                    <div class="d-grid gap-2 d-sm-flex justify-content-center">
-                        {{-- 1. FORM UNTUK ADD TO CART (CHART) --}}
-                        <form action="{{ route('cart.store') }}" method="POST" class="d-inline flex-fill">
+                   <ul class="list-unstyled mb-4">
+    @if ($product->features && is_array($product->features))
+        @foreach ($product->features as $feature)
+        <li class="mb-2 d-flex align-items-start">
+            <i class="fas fa-check-circle me-3 mt-1 text-primary-rose flex-shrink-0"></i>
+            <span class="text-dark">{{ $feature }}</span>
+        </li>
+        @endforeach
+    @else
+        {{-- Tampilkan pesan default jika fitur kosong atau tidak valid --}}
+        <li class="mb-2 d-flex align-items-start text-muted small">
+            <i class="fas fa-info-circle me-3 mt-1 flex-shrink-0"></i>
+            <span>Rincian fitur belum tersedia.</span>
+        </li>
+    @endif
+</ul>
+
+                    {{-- Footer Card (Tombol Pesan) --}}
+                    <div class="mt-auto">
+                        <form action="{{ route('cart.store') }}" method="POST">
                             @csrf
-                            <input type="hidden" name="product_id" value="{{ $package->id }}">
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
                             <input type="hidden" name="quantity" value="1">
-                            <button type="submit" class="btn btn-sm btn-primary-rose w-100">
-                                <i class="fas fa-shopping-cart me-1"></i> Add to Chart
+                            <button type="submit" class="btn w-100 fw-bold btn-{{ $product->id == 2 ? 'dark' : 'primary-rose' }} shadow-sm">
+                                <i class="fas fa-cart-plus me-1"></i> Pesan Sekarang
                             </button>
                         </form>
-                        {{-- 2. PESAN LANGSUNG (Link ke Checkout) --}}
-                        <a href="{{ url('/checkout/direct/' . $package->id) }}" class="btn btn-sm btn-outline-secondary flex-fill d-flex align-items-center justify-content-center">
-                            <i class="fas fa-bolt me-1"></i> Pesan Langsung
-                        </a>
                     </div>
                 </div>
             </div>
         </div>
-        @endif
         @endforeach
     </div>
 </section>
 
+    {{-- ========================================================== --}}
+    {{-- 4. SECTION ITEM TERPISAH (ADD-ONS DARI DB) --}}
+    {{-- ========================================================== --}}
 
+<section id="add-ons" class="container py-5 bg-white shadow-sm">
+    <div class="text-center mb-5">
+        <h2 class="display-6 fw-bold mb-2 text-dark">Layanan & Perlengkapan Terpisah (Add-Ons) 🛠️</h2>
+        <p class="lead text-secondary">Sesuaikan paket Anda dengan layanan tambahan yang dibutuhkan.</p>
+    </div>
 
-    {{-- 6. SECTION LIVE STREAMING --}}
-    
-    
-    
-    <section class="container py-5">
-        @php $liveStreamTitle = $product1->firstWhere('category_id', 3)->nama_kategori ?? 'Live Streaming'; @endphp
-        
-        <h2 class="text-center text-dark fw-bold mb-5">{{ $liveStreamTitle }}</h2>
-        
-        <div class="row row-cols-1 row-cols-md-3 g-4 pt-2">
-            @foreach ($product1 as $package)
-            @if($package->category_id == 3)
-            <div class="col">
-                <div class="card bg-white h-100 border border-primary-rose shadow-lg text-center card-hover-scale">
-                    <div class="card-body p-4 d-flex flex-column">
-                        <h5 class="text-primary-rose fw-bold">{{ $package->name }}</h5>
-                        <h4 class="fw-bolder text-dark mt-4">Rp {{ number_format($package->price, 0, ',', '.') }},-</h4>
-                        <hr>
-                        <ul class="list-unstyled small text-secondary mx-auto flex-grow-1" style="max-width: 250px;">
-                             <li><i class="fas fa-check-circle me-1 text-primary-rose"></i> {{ $package->description }}</li>
-                        </ul>
-                        
-                        {{-- DUAL CTA BUTTONS FIX --}}
-                        <div class="d-grid gap-2 d-sm-flex justify-content-center mt-auto">
-                            <button class="btn btn-sm btn-primary-rose flex-fill">
-                                <i class="fas fa-shopping-cart me-1"></i> Add to Chart
-                            </button>
-                            <button class="btn btn-sm btn-outline-secondary flex-fill">
-                                <i class="fas fa-bolt me-1"></i> Pesan Langsung
-                            </button>
-                        </div>
-                    </div>
+    <div class="row g-3">
+        @foreach ($addons as $addon)
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="card h-100 shadow-sm border-light card-hover-scale">
+                <div class="card-body p-3 d-flex flex-column align-items-center text-center">
+                    <i class="fas fa-{{ $addon->icon }} fa-2x text-primary-rose mb-3"></i>
+                    <h6 class="fw-bold text-dark mb-1">{{ $addon->name }}</h6>
+                    <p class="small text-secondary mb-3">Rp {{ number_format($addon->price, 0, ',', '.') }}</p>
+                    
+                    <form action="{{ route('cart.store') }}" method="POST" class="mt-auto w-100">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $addon->id }}">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="btn btn-sm btn-outline-primary-rose w-100 fw-bold">
+                            Tambah ke Keranjang
+                        </button>
+                    </form>
                 </div>
             </div>
-            @endif
-            @endforeach
         </div>
-        
-        {{-- Cara Kerja Live Streaming --}}
-        {{-- <h4 class="text-center text-dark fw-bold mt-5 mb-4">Cara Kerja Live Streaming Kami</h4>
-        <div class="text-center">
-            <img src="https://via.placeholder.com/900x300?text=Live+Streaming+Workflow+Diagram" class="img-fluid rounded-lg shadow-lg" alt="Workflow Diagram">
-            <p class="small text-secondary mt-3">Output siaran dapat disiarkan ke berbagai platform seperti YouTube, Zoom, atau platform kustom.</p>
-        </div> --}}
-    </section>
-
-
-    
+        @endforeach
+    </div>
+</section>
+<hr class="container border-primary-rose my-5">
 
 
     {{-- ========================================================== --}}
@@ -418,9 +284,9 @@
                 {{-- Membiarkan card sebagai gallery-item yang akan di-overlay --}}
                 <div class="gallery-item shadow-lg border border-3 border-white rounded-3"> 
                     <img src="https://via.placeholder.com/600x400?text={{ urlencode($activity['title']) }}" 
-                         class="img-fluid w-100" 
-                         alt="{{ $activity['title'] }}" 
-                         style="height: 250px; object-fit: cover;">
+                             class="img-fluid w-100" 
+                             alt="{{ $activity['title'] }}" 
+                             style="height: 250px; object-fit: cover;">
                     <div class="gallery-overlay">
                         <div>
                             <h4 class="fw-bold text-white mb-2">{{ $activity['title'] }}</h4>
@@ -440,7 +306,6 @@
         </div>
     </div>
 </section>
-
 
 
     {{-- 7. MITRA KERJASAMA (Penomoran disesuaikan) --}}
@@ -472,45 +337,6 @@
     </section>
 
     {{-- 8. SECTION TIM ORGANISASI (Penomoran disesuaikan) --}}
-    <section id="our-team" class="container py-5">
-        <div class="text-center mb-5">
-            <h2 class="display-6 fw-bold mb-2 text-dark">Meet Our Amazing Team 🤝</h2>
-            <p class="lead text-primary-rose">Profesional di Balik Setiap Acara Sukses Anda.</p>
-        </div>
-        
-        <div class="row justify-content-center g-4">
-            @php
-                $team = [
-                    ['name' => 'Michael Santoso', 'role' => 'Founder & CEO', 'img' => 'Michael'],
-                    ['name' => 'Rina Wijaya', 'role' => 'Head of Planning', 'img' => 'Rina'],
-                    ['name' => 'Faisal Ali', 'role' => 'Lead Technician', 'img' => 'Faisal'],
-                    ['name' => 'Clara Lee', 'role' => 'Client Relations', 'img' => 'Clara'],
-                ];
-            @endphp
-
-            @foreach ($team as $member)
-            <div class="col-6 col-md-3">
-                <div class="card bg-white h-100 border-0 shadow-lg text-center card-hover-scale">
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-center mb-3">
-                            <img src="https://via.placeholder.com/150x150?text={{ $member['img'] }}" 
-                                class="rounded-circle border border-3 border-primary-rose shadow" 
-                                alt="{{ $member['name'] }}" 
-                                style="width: 120px; height: 120px; object-fit: cover;">
-                        </div>
-
-                        <h5 class="fw-bold text-dark mb-1">{{ $member['name'] }}</h5>
-                        <p class="small text-primary-rose">{{ $member['role'] }}</p>
-                        <p class="small text-secondary mt-3 mb-0">
-                            Fokus pada detail dan kepuasan klien adalah prioritas utama kami.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            @endforeach
-        </div>
-    </section>
-    
     <hr class="container border-primary-rose my-5">
     
     {{-- CTA AKHIR --}}
@@ -640,7 +466,7 @@
                         </h2>
                         <div id="collapseFAQTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                             <div class="accordion-body bg-white text-secondary">
-                                Kami hanya menyediakan *Sound Man* (teknisi audio) yang ahli, bersertifikat, dan berpengalaman. Kualitas peralatan sebagus apapun akan percuma tanpa operator yang mumpuni. Kami menjamin tim yang mengoperasikan acara Anda adalah yang terbaik di bidangnya.
+                                <p>Kami hanya menyediakan *Sound Man* (teknisi audio) yang ahli, bersertifikat, dan berpengalaman. Kualitas peralatan sebagus apapun akan percuma tanpa operator yang mumpuni. Kami menjamin tim yang mengoperasikan acara Anda adalah yang terbaik di bidangnya.</p>
                             </div>
                         </div>
                     </div>
@@ -654,7 +480,7 @@
                         </h2>
                         <div id="collapseFAQThree" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
                             <div class="accordion-body bg-white text-secondary">
-                                Ya, kami melayani berbagai acara di seluruh area **Jabodetabek**. Untuk acara skala besar di luar kota (Jawa Barat dan Jawa Tengah), silakan hubungi tim konsultan kami untuk penawaran khusus.
+                                <p>Ya, kami melayani berbagai acara di seluruh area **Jabodetabek**. Untuk acara skala besar di luar kota (Jawa Barat dan Jawa Tengah), silakan hubungi tim konsultan kami untuk penawaran khusus.</p>
                             </div>
                         </div>
                     </div>

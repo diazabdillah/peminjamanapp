@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo; // Import untuk tipe data relasi
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str; // Tambahkan ini jika Anda menggunakan Slug otomatis
 
 class Product extends Model
 {
@@ -18,12 +19,31 @@ class Product extends Model
         'description', 
         'price', 
         'stock', 
-        'image', // Gambar utama/thumbnail
+        'image', 
         'is_available',
+        'type', 
+        'tag', 
+        'features', 
+        'icon',
     ];
     
-    // Pastikan kolom image di tabel products dihapus jika Anda hanya mengandalkan ProductImage, 
-    // tetapi jika ingin mempertahankan thumbnail, biarkan kolom 'image' tetap ada.
+    // Cast kolom numerik/JSON
+    protected $casts = [
+        'price' => 'integer',
+        'stock' => 'integer',
+        'is_available' => 'boolean',
+        'features' => 'array', // PENTING: Mengubah string JSON menjadi PHP array
+    ];
+
+    // Accessor/Mutator (Opsional tapi berguna untuk slug otomatis)
+    // public static function boot()
+    // {
+    //     parent::boot();
+
+    //     static::creating(function ($product) {
+    //         $product->slug = Str::slug($product->name);
+    //     });
+    // }
 
     /**
      * Relasi: Produk dimiliki oleh satu Kategori.
@@ -39,6 +59,25 @@ class Product extends Model
      */
     public function images(): HasMany
     {
+        // Asumsi model ProductImage sudah ada dan memiliki foreign key product_id
         return $this->hasMany(ProductImage::class)->orderBy('sort_order');
+    }
+    
+    // --- QUERY SCOPE (Opsional tapi Direkomendasikan) ---
+    
+    /**
+     * Scope untuk mengambil hanya produk tipe Paket.
+     */
+    public function scopePackages($query)
+    {
+        return $query->where('type', 'package');
+    }
+
+    /**
+     * Scope untuk mengambil hanya produk tipe Add-ons.
+     */
+    public function scopeAddons($query)
+    {
+        return $query->where('type', 'addon');
     }
 }

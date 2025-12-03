@@ -2,94 +2,128 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cart;
-use App\Models\Product;
+use App\Models\Product; 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // Wajib di-import
+use Illuminate\Support\Facades\Session; // Wajib di-import
+use Illuminate\Support\Facades\Auth; // Tetap di-import jika digunakan di luar class (misal: Blade)
+
 class CartController extends Controller
 {
-    // Helper function untuk mendapatkan Cart milik user saat ini
-   private function getUserCart()
-    {
-        // Panggilan cart() harus didefinisikan sebagai relasi hasOne di App\Models\User
-        if (!Auth::check()) {
-            // Ini seharusnya dicegah oleh middleware('auth'), tetapi sebagai pengaman
-            abort(403, 'Anda harus login untuk mengakses keranjang.');
-        }
-        
-        // Temukan Cart berdasarkan user_id, jika tidak ada, buat Cart baru.
-        return Auth::user()->cart()->firstOrCreate(['user_id' => Auth::id()]);
-    }
+    // CATATAN: Metode getUserCart() dihapus karena kita menggunakan session()->get('cart')
 
-    /**
-     * Menampilkan isi Keranjang Belanja.
-     */
     public function index()
     {
-        $cart = $this->getUserCart();
-        // Muat item keranjang beserta detail produk
-        $cartItems = $cart->items()->with('product')->get();
+        $sessionCart = session()->get('cart', []);
+        $cartItems = collect();
+        $subtotal = 0;
+
+        foreach ($sessionCart as $productId => $itemData) {
+            $product = Product::find($productId);
+
+            if ($product && isset($itemData['quantity'])) {
+                $quantity = $itemData['quantity'];
+                $itemSubtotal = $quantity * $product->price;
+
+                $item = (object)[
+                    'id' => $productId,
+                    'quantity' => $quantity,
+                    'product' => $product,
+                    'subtotal' => $itemSubtotal
+                ];
+
+                $cartItems->push($item);
+                $subtotal += $itemSubtotal;
+            } else {
+                Session::forget("cart.$productId");
+            }
+        }
         
-        $subtotal = $cartItems->sum(fn($item) => $item->quantity * $item->product->price);
-        
-        // Catatan: Variabel $cartItems, $subtotal, $total digunakan di views/cart/index.blade.php
         return view('cart.index', compact('cartItems', 'subtotal'));
     }
 
-    /**
-     * Menambahkan item ke Keranjang atau memperbarui kuantitas.
-     */
-  public function store(Request $request)
+    public function store(Request $request)
     {
+        // ... (Metode store Anda sudah benar dan berbasis Session) ...
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
         ]);
+        
+        $cart = session()->get('cart', []);
+        $productId = $request->product_id;
+        $quantityToAdd = $request->quantity;
 
-       $cart = $this->getUserCart();
-       $product = Product::findOrFail($request->product_id);
-
-        // Cek apakah item sudah ada di keranjang
-        $cartItem = $cart->items()->where('product_id', $product->id)->first();
-
-        if ($cartItem) {
-            // Jika sudah ada, tambahkan kuantitas
-            $cartItem->quantity += $request->quantity;
-            $cartItem->save(); // save() bekerja karena kita memanggilnya pada objek tunggal
+        if (isset($cart[$productId])) {
+            $cart[$productId]['quantity'] += $quantityToAdd;
         } else {
-            // Jika belum ada, buat item baru
-            // CREATE BERHASIL JIKA $fillable DI CartItem.php sudah benar
-            $cart->items()->create([
-                'product_id' => $product->id,
-                'quantity' => $request->quantity,
-            ]);
+            $product = Product::findOrFail($productId);
+            
+            $cart[$productId] = [
+                "id" => $productId,
+                "name" => $product->name,
+                "price" => $product->price,
+                "quantity" => $quantityToAdd,
+            ];
         }
 
+        session()->put('cart', $cart);
         return redirect()->route('cart.index')->with('success', 'Produk berhasil ditambahkan ke keranjang!');
     }
 
     /**
      * Memperbarui kuantitas item tertentu.
+     * PERBAIKAN: Menggunakan Session array manipulation.
      */
-    public function update(Request $request, $itemId)
+    public function update(Request $request, $productId) // $itemId diubah menjadi $productId
     {
         $request->validate(['quantity' => 'required|integer|min:1']);
         
-        // Pastikan item dimiliki oleh Cart user yang sedang login
-        $cartItem = $this->getUserCart()->items()->findOrFail($itemId);
-        $cartItem->update(['quantity' => $request->quantity]);
+        $cart = session()->get('cart', []);
+        $newQuantity = $request->quantity;
 
-        return back()->with('success', 'Kuantitas diperbarui.');
+        if (isset($cart[$productId])) {
+            $cart[$productId]['quantity'] = $newQuantity;
+            session()->put('cart', $cart);
+            return back()->with('success', 'Kuantitas diperbarui.');
+        }
+
+        return back()->with('error', 'Item tidak ditemukan.');
     }
 
     /**
      * Menghapus item dari Keranjang.
+     * PERBAIKAN: Menggunakan Session array manipulation.
      */
-    public function destroy($itemId)
+    public function destroy($productId) // $itemId diubah menjadi $productId
     {
-        // Pastikan item dimiliki oleh Cart user yang sedang login
-        $this->getUserCart()->items()->findOrFail($itemId)->delete();
+        $cart = session()->get('cart', []);
+
+        if (isset($cart[$productId])) {
+            unset($cart[$productId]); // Hapus key produk dari array
+            session()->put('cart', $cart);
+            return back()->with('success', 'Item dihapus dari keranjang.');
+        }
         
+        return back()->with('error', 'Item tidak ditemukan.');
+    }
+    
+    /**
+     * Mengosongkan Keranjang.
+     */
+public function clear()
+{
+    $productId = (int) $productId; // Atau tambahkan (string) jika perlu
+
+    $cart = session()->get('cart', []);
+
+    if (isset($cart[$productId])) {
+        // Item ditemukan
+        unset($cart[$productId]); 
+        session()->put('cart', $cart);
         return back()->with('success', 'Item dihapus dari keranjang.');
     }
+    
+    // Item tidak ditemukan (error Anda berasal dari sini)
+    return back()->with('error', 'Item tidak ditemukan.');
+}
 }

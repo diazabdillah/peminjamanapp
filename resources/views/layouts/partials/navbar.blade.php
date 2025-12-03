@@ -41,24 +41,27 @@
             </ul>
             
             <div class="d-flex align-items-center">
-                 @auth 
                 
-                {{-- 1. Ikon Keranjang (Badge hanya muncul jika $cartCount > 0) --}}
                 @php
-                    // Pastikan count dihitung di View Composer atau Controller (default 0 jika null)
+                    // Ambil jumlah item di keranjang. Jika belum di-set, default 0.
+                    // Gunakan View Composer di Laravel untuk setting variabel global ini.
                     $currentCartCount = $cartCount ?? 0; 
                 @endphp
-
+                
+                {{-- 1. Ikon Keranjang (Badge hanya muncul jika $currentCartCount > 0) --}}
                 <a href="{{ route('cart.index') }}" class="btn btn-link text-dark position-relative p-0 me-3">
                     <i class="fas fa-shopping-cart fa-lg"></i>
                     
                     @if ($currentCartCount > 0)
+                    {{-- Tampilkan angka '1' di badge jika keranjang tidak kosong --}}
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger" style="font-size: 0.6em;">
-                        {{ $currentCartCount }} 
+                        1 {{-- Nilai hardcode '1' sesuai permintaan, meskipun $currentCartCount > 0 --}}
                         <span class="visually-hidden">items in cart</span>
                     </span>
                     @endif
                 </a>
+                
+                @auth 
                 {{-- 2. Dropdown Profile (Tombol Profile & Logout) --}}
                 <div class="dropdown">
                     <button class="btn btn-primary-rose dropdown-toggle btn-sm fw-bold" 
